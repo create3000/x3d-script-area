@@ -18,8 +18,8 @@ class X3DScriptAreaElement extends HTMLElement
    #buttons;
    #run;
    #reset;
-   #output;
    #console;
+   #output;
 
    constructor ()
    {
@@ -106,14 +106,14 @@ class X3DScriptAreaElement extends HTMLElement
    background: var(--highlight-color);
 }
 
-.output {
+.console {
    box-sizing: border-box;
    flex: 1 1 auto;
    height: 100%;
    border-left: 1px solid var(--border-color);
 }
 
-.console {
+.output {
    box-sizing: border-box;
    overflow: scroll;
    width: 100%;
@@ -127,8 +127,17 @@ class X3DScriptAreaElement extends HTMLElement
    font-size: 10pt;
 }
 
-.console p {
+.output p {
    margin: 1px 0;
+}
+
+.output p.splitter {
+   margin: 5px 0;
+   border-top: 1px solid var(--border-color);
+}
+
+.output p.splitter:last-child {
+   display: none;
 }
       `)
       .appendTo (shadow);
@@ -170,13 +179,13 @@ class X3DScriptAreaElement extends HTMLElement
          .on ("click", () => this .reset ())
          .appendTo (this .#buttons);
 
-      this .#output = $("<div></div>")
-         .addClass ("output")
-         .appendTo (this .#bottom);
-
       this .#console = $("<div></div>")
          .addClass ("console")
-         .appendTo (this .#output);
+         .appendTo (this .#bottom);
+
+      this .#output = $("<div></div>")
+         .addClass ("output")
+         .appendTo (this .#console);
 
       require (["vs/editor/editor.main"], () => this .setup ());
    }
@@ -260,6 +269,8 @@ class X3DScriptAreaElement extends HTMLElement
 
          script .getValue () .evaluate (text);
 
+         this .#output .append ($("<p></p>") .addClass ("splitter"));
+
          this .restoreConsole ();
       }
       catch (error)
@@ -283,9 +294,9 @@ class X3DScriptAreaElement extends HTMLElement
 
             $("<p></p>")
                .append (args .join (" "))
-               .appendTo (this .#console);
+               .appendTo (this .#output);
 
-            this .#console .scrollTop (this .#console .prop ("scrollHeight"));
+            this .#output .scrollTop (this .#output .prop ("scrollHeight"));
          };
       }
    }
@@ -299,7 +310,7 @@ class X3DScriptAreaElement extends HTMLElement
    reset ()
    {
       this .#model .setValue ($(this) .text () .trim ());
-      this .#console .empty ();
+      this .#output .empty ();
    }
 }
 
