@@ -118,6 +118,7 @@ class X3DScriptAreaElement extends HTMLElement
    outline: none;
    border: none;
    resize: none;
+   padding: 5px;
 }
       `)
       .appendTo (shadow);
