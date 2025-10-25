@@ -5,7 +5,10 @@ require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${M
 
 class X3DScriptAreaElement extends HTMLElement
 {
+   static #canvas;
+
    #browser;
+   #scene;
    #editor;
    #model;
    #area;
@@ -151,6 +154,7 @@ class X3DScriptAreaElement extends HTMLElement
       this .#run = $("<button></button>")
          .addClass ("button")
          .text ("Run")
+         .on ("click", () => this .run ())
          .appendTo (this .#buttons);
 
       this .#reset = $("<button></button>")
@@ -171,7 +175,7 @@ class X3DScriptAreaElement extends HTMLElement
       require (["vs/editor/editor.main"], () => this .setup ());
    }
 
-   setup ()
+   async setup ()
    {
       // Handle color scheme changes.
       // Must be done at first.
@@ -184,7 +188,7 @@ class X3DScriptAreaElement extends HTMLElement
       // Editor
 
       const
-         canvas = X3D .createBrowser (),
+         canvas = X3DScriptAreaElement .#canvas ??= X3D .createBrowser (),
          model  = monaco .editor .createModel ("", "javascript"),
          editor = monaco .editor .create (this .#editable .get (0),
          {
@@ -202,6 +206,10 @@ class X3DScriptAreaElement extends HTMLElement
       this .#browser = canvas .browser;
       this .#editor  = editor;
       this .#model   = model;
+
+      // Scene
+
+      this .#scene = await this .#browser .createScene (this .#browser .getProfile ("Full"));
 
       this .reset ();
    }
@@ -231,6 +239,22 @@ class X3DScriptAreaElement extends HTMLElement
             this .#title .text (newValue);
             break;
          }
+      }
+   }
+
+   run ()
+   {
+      try
+      {
+         const
+            script = this .#scene .createNode ("Script"),
+            text   = this .#editor .getValue ();
+
+         script .getValue () .evaluate (text);
+      }
+      catch (error)
+      {
+         console .error (error);
       }
    }
 
