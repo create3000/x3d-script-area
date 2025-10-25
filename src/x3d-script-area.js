@@ -6,8 +6,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       const shadow = $(this .attachShadow ({ mode: "open", delegatesFocus: true }));
 
-      $("<style></style>")
-      .text (/* CSS */ `
+      $("<style></style>") .text (/* CSS */ `
 :host {
    display: block;
    width: 100%;
