@@ -11,7 +11,12 @@ class X3DScriptAreaElement extends HTMLElement
    #area;
    #title;
    #editable;
+   #bottom;
+   #buttons;
+   #run;
+   #reset;
    #output;
+   #console;
 
    constructor ()
    {
@@ -23,17 +28,19 @@ class X3DScriptAreaElement extends HTMLElement
 :host {
    display: block;
    width: 100%;
-   aspect-ratio: 2 / 1;
+   height: 360px;
 }
 
 .area.light {
    --text-color: #272727;
    --border-color: rgb(190, 190, 190);
+   --highlight-color: rgba(0, 0, 0, 0.1);
 }
 
 .area.dark {
    --text-color: rgb(206, 206, 206);
    --border-color: rgb(68, 68, 68);
+   --highlight-color: rgba(255, 255, 255, 0.1);
 }
 
 .area {
@@ -44,12 +51,13 @@ class X3DScriptAreaElement extends HTMLElement
    height: 100%;
    border: 1px solid var(--border-color);
    border-radius: 10px;
+   font-size: 12pt;
 }
 
 .title {
    box-sizing: border-box;
    flex: 0 0 auto;
-   padding: 8px;
+   padding: 8px 8px 5px 8px;
    font-family: sans-serif;
    font-weight: bold;
    color: var(--text-color);
@@ -63,10 +71,53 @@ class X3DScriptAreaElement extends HTMLElement
    width: 100%;
 }
 
-.output {
+.bottom {
    box-sizing: border-box;
+   display: flex;
    flex: 0 0 auto;
    height: 30%;
+}
+
+.buttons {
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column;
+   flex: 0 0 auto;
+   width: 10%;
+}
+
+.button {
+   cursor: pointer;
+   flex: 0 0 auto;
+   padding: 8px 8px 5px 8px;
+   font-size: 9pt;
+   font-family: sans-serif;
+   font-weight: bold;
+   color: var(--text-color);
+   border: none;
+   border-bottom: 1px solid var(--border-color);
+   background: none;
+}
+
+.button:hover {
+   background: var(--highlight-color);
+}
+
+.output {
+   box-sizing: border-box;
+   flex: 1 1 auto;
+   height: 100%;
+   border-left: 1px solid var(--border-color);
+}
+
+.console {
+   box-sizing: border-box;
+   width: 100%;
+   height: 100%;
+   background: none;
+   outline: none;
+   border: none;
+   resize: none;
 }
       `)
       .appendTo (shadow);
@@ -88,9 +139,32 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("editor")
          .appendTo (this .#area);
 
+      this .#bottom = $("<div></div>")
+         .addClass ("bottom")
+         .appendTo (this .#area);
+
+      this .#buttons = $("<div></div>")
+         .addClass ("buttons")
+         .appendTo (this .#bottom);
+
+      this .#run = $("<button></button>")
+         .addClass ("button")
+         .text ("Run")
+         .appendTo (this .#buttons);
+
+      this .#run = $("<button></button>")
+         .addClass ("button")
+         .text ("Reset")
+         .appendTo (this .#buttons);
+
       this .#output = $("<div></div>")
          .addClass ("output")
-         .appendTo (this .#area);
+         .appendTo (this .#bottom);
+
+      this .#console = $("<textarea></textarea>")
+         .addClass ("console")
+         .attr ("readonly", "")
+         .appendTo (this .#output);
 
       require (["vs/editor/editor.main"], () => this .setup ());
    }
