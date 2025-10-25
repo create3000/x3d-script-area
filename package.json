@@ -1,0 +1,26 @@
+{
+  "name": "x3d-script-area",
+  "version": "1.0.0",
+  "description": "A HTML <x3d-script-area> element.",
+  "keywords": [
+    "X_ITE",
+    "X3D",
+    "VRML",
+    "JavaScript"
+  ],
+  "homepage": "https://github.com/create3000/x3d-script-area#readme",
+  "bugs": {
+    "url": "https://github.com/create3000/x3d-script-area/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/create3000/x3d-script-area.git"
+  },
+  "license": "MIT",
+  "author": "Holger Seelig",
+  "type": "commonjs",
+  "main": "src/x3d-script-area-js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
