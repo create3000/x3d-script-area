@@ -17,6 +17,12 @@ class X3DScriptAreaElement extends HTMLElement
       const shadow = $(this .attachShadow ({ mode: "open", delegatesFocus: true }));
 
       $("<style></style>") .text (/* CSS */ `
+:host {
+   display: block;
+   width: 100%;
+   aspect-ratio: 2 / 1;
+}
+
 .area.light {
    --text-color: black;
    --border-color: rgb(190, 190, 190);
@@ -25,12 +31,6 @@ class X3DScriptAreaElement extends HTMLElement
 .area.dark {
    --text-color: white;
    --border-color: rgb(68, 68, 68);
-}
-
-:host {
-   display: block;
-   width: 100%;
-   aspect-ratio: 2 / 1;
 }
 
 .area {
