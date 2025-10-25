@@ -27,12 +27,12 @@ class X3DScriptAreaElement extends HTMLElement
 }
 
 .area.light {
-   --text-color: black;
+   --text-color: #272727;
    --border-color: rgb(190, 190, 190);
 }
 
 .area.dark {
-   --text-color: white;
+   --text-color: rgb(206, 206, 206);
    --border-color: rgb(68, 68, 68);
 }
 
