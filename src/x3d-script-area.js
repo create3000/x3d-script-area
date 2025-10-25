@@ -4,7 +4,15 @@ class X3DScriptAreaElement extends HTMLElement
    {
       super ();
 
-      this .attachShadow ({ mode: "open", delegatesFocus: true });
+      const shadow = $(this .attachShadow ({ mode: "open", delegatesFocus: true }));
+
+      $("<style></style>")
+      .text (`
+:host {
+   display: inline-block;
+}
+      `)
+      .appendTo (shadow);
 
       console .log ("constructor");
    }
