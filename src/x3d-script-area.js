@@ -7,7 +7,8 @@ class X3DScriptAreaElement extends HTMLElement
    #editor;
    #model;
    #area;
-   #editorElement;
+   #title;
+   #editable;
 
    constructor ()
    {
@@ -16,27 +17,47 @@ class X3DScriptAreaElement extends HTMLElement
       const shadow = $(this .attachShadow ({ mode: "open", delegatesFocus: true }));
 
       $("<style></style>") .text (/* CSS */ `
+.area.light {
+   --text-color: black;
+   --border-color: rgb(190, 190, 190);
+}
+
+.area.dark {
+   --text-color: white;
+   --border-color: rgb(68, 68, 68);
+}
+
 :host {
    display: block;
    width: 100%;
    aspect-ratio: 2 / 1;
-   border: 1px solid black;
-   border-radius: 10px;
 }
 
 .area {
    box-sizing: border-box;
    display: flex;
+   flex-direction: column;
    width: 100%;
    height: 100%;
-   padding-top: 30px;
+   border: 1px solid var(--border-color);
+   border-radius: 10px;
    padding-bottom: 30px;
+}
+
+.title {
+   box-sizing: border-box;
+   flex: 0 0 auto;
+   padding: 8px;
+   font-family: sans-serif;
+   font-weight: bold;
+   color: var(--text-color);
 }
 
 .editor {
    box-sizing: border-box;
-   border-top: 1px solid black;
-   border-bottom: 1px solid black;
+   flex: 1 1 auto;
+   border-top: 1px solid var(--border-color);
+   border-bottom: 1px solid var(--border-color);
    width: 100%;
 }
       `)
@@ -51,7 +72,11 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("area")
          .appendTo (shadow);
 
-      this .#editorElement = $("<div></div>")
+      this .#title = $("<div></div>")
+         .addClass ("title")
+         .appendTo (this .#area);
+
+      this .#editable = $("<div></div>")
          .addClass ("editor")
          .appendTo (this .#area);
 
@@ -73,7 +98,7 @@ class X3DScriptAreaElement extends HTMLElement
       const
          canvas = X3D .createBrowser (),
          model  = monaco .editor .createModel ("", "javascript"),
-         editor = monaco .editor .create (this .#editorElement .get (0),
+         editor = monaco .editor .create (this .#editable .get (0),
          {
             model: model,
             language: "javascript",
@@ -104,6 +129,23 @@ class X3DScriptAreaElement extends HTMLElement
          .removeClass (["light", "dark"])
          .addClass (darkMode ? "dark" : "light");
    }
+
+   static observedAttributes = [
+      "title",
+   ];
+
+   attributeChangedCallback (name, oldValue, newValue)
+   {
+      switch (name)
+      {
+         case "title":
+         {
+            this .#title .text (newValue);
+            break;
+         }
+      }
+   }
+
 }
 
 customElements .define ("x3d-script-area", X3DScriptAreaElement);
