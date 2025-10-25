@@ -273,13 +273,13 @@ class X3DScriptAreaElement extends HTMLElement
 
    wrapConsole ()
    {
-      for (const fn of this .#consoleKeys)
+      for (const key of this .#consoleKeys)
       {
-         this .#consoleFunctions [fn] = console [fn];
+         const fn = this .#consoleFunctions [key] = console [key];
 
-         console [fn] = (... args) =>
+         console [key] = (... args) =>
          {
-            this .#consoleFunctions [fn] .call (console, ... args);
+            fn .call (console, ... args);
 
             $("<p></p>")
                .append (args .join (" "))
