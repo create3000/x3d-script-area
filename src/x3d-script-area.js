@@ -9,7 +9,9 @@ class X3DScriptAreaElement extends HTMLElement
       $("<style></style>")
       .text (`
 :host {
-   display: inline-block;
+   display: block;
+   width: 100%;
+   aspect-ratio: 16 / 3;
 }
       `)
       .appendTo (shadow);
