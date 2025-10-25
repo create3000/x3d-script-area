@@ -10,7 +10,7 @@ class X3DScriptAreaElement extends HTMLElement
 :host {
    display: block;
    width: 100%;
-   aspect-ratio: 16 / 3;
+   aspect-ratio: 2 / 1;
 }
       `)
       .appendTo (shadow);
