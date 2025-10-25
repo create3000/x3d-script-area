@@ -11,6 +11,7 @@ class X3DScriptAreaElement extends HTMLElement
    #area;
    #title;
    #editable;
+   #output;
 
    constructor ()
    {
@@ -43,7 +44,6 @@ class X3DScriptAreaElement extends HTMLElement
    height: 100%;
    border: 1px solid var(--border-color);
    border-radius: 10px;
-   padding-bottom: 30px;
 }
 
 .title {
@@ -61,6 +61,12 @@ class X3DScriptAreaElement extends HTMLElement
    border-top: 1px solid var(--border-color);
    border-bottom: 1px solid var(--border-color);
    width: 100%;
+}
+
+.output {
+   box-sizing: border-box;
+   flex: 0 0 auto;
+   height: 30%;
 }
       `)
       .appendTo (shadow);
@@ -80,6 +86,10 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .#editable = $("<div></div>")
          .addClass ("editor")
+         .appendTo (this .#area);
+
+      this .#output = $("<div></div>")
+         .addClass ("output")
          .appendTo (this .#area);
 
       require (["vs/editor/editor.main"], () => this .setup ());
