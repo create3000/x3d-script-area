@@ -20,16 +20,23 @@ class X3DScriptAreaElement extends HTMLElement
    display: block;
    width: 100%;
    aspect-ratio: 2 / 1;
+   border: 1px solid black;
+   border-radius: 10px;
 }
 
 .area {
+   box-sizing: border-box;
    display: flex;
    width: 100%;
    height: 100%;
-   background: blue;
+   padding-top: 30px;
+   padding-bottom: 30px;
 }
 
 .editor {
+   box-sizing: border-box;
+   border-top: 1px solid black;
+   border-bottom: 1px solid black;
    width: 100%;
 }
       `)
@@ -88,11 +95,15 @@ class X3DScriptAreaElement extends HTMLElement
 
    changeColorScheme ()
    {
-      const darkMode = (window .matchMedia ?.("(prefers-color-scheme: dark)") .matches || $("html") .attr ("data-mode") === "dark") && ($("html") .attr ("data-mode") !== "light");
+      const darkMode = (window .matchMedia ?.("(prefers-color-scheme: dark)") .matches
+         || $("html") .attr ("data-mode") === "dark") && ($("html") .attr ("data-mode") !== "light");
 
       monaco .editor .setTheme (darkMode ? "vs-dark" : "vs-light");
-   }
 
+      this .#area
+         .removeClass (["light", "dark"])
+         .addClass (darkMode ? "dark" : "light");
+   }
 }
 
 customElements .define ("x3d-script-area", X3DScriptAreaElement);
