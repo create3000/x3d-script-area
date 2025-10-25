@@ -57,7 +57,7 @@ class X3DScriptAreaElement extends HTMLElement
 .title {
    box-sizing: border-box;
    flex: 0 0 auto;
-   padding: 8px 8px 5px 8px;
+   padding: 8px;
    font-family: sans-serif;
    font-weight: bold;
    color: var(--text-color);
@@ -89,7 +89,7 @@ class X3DScriptAreaElement extends HTMLElement
 .button {
    cursor: pointer;
    flex: 0 0 auto;
-   padding: 8px 8px 5px 8px;
+   padding: 8px;
    font-size: 9pt;
    font-family: sans-serif;
    font-weight: bold;
@@ -118,7 +118,7 @@ class X3DScriptAreaElement extends HTMLElement
    outline: none;
    border: none;
    resize: none;
-   padding: 5px;
+   padding: 8px;
 }
       `)
       .appendTo (shadow);
