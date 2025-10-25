@@ -115,6 +115,7 @@ class X3DScriptAreaElement extends HTMLElement
 
 .console {
    box-sizing: border-box;
+   overflow: scroll;
    width: 100%;
    height: 100%;
    background: none;
@@ -122,6 +123,12 @@ class X3DScriptAreaElement extends HTMLElement
    border: none;
    resize: none;
    padding: 8px;
+   font-family: monospace;
+   font-size: 10pt;
+}
+
+.console p {
+   margin: 1px 0;
 }
       `)
       .appendTo (shadow);
@@ -167,9 +174,8 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("output")
          .appendTo (this .#bottom);
 
-      this .#console = $("<textarea></textarea>")
+      this .#console = $("<div></div>")
          .addClass ("console")
-         .attr ("readonly", "")
          .appendTo (this .#output);
 
       require (["vs/editor/editor.main"], () => this .setup ());
@@ -250,7 +256,11 @@ class X3DScriptAreaElement extends HTMLElement
             script = this .#scene .createNode ("Script"),
             text   = this .#editor .getValue ();
 
+         this .wrapConsole ();
+
          script .getValue () .evaluate (text);
+
+         this .restoreConsole ();
       }
       catch (error)
       {
@@ -258,9 +268,38 @@ class X3DScriptAreaElement extends HTMLElement
       }
    }
 
+   #consoleKeys = ["log", "warn", "error", "debug"];
+   #consoleFunctions = { };
+
+   wrapConsole ()
+   {
+      for (const fn of this .#consoleKeys)
+      {
+         this .#consoleFunctions [fn] = console [fn];
+
+         console [fn] = (... args) =>
+         {
+            this .#consoleFunctions [fn] .call (console, ... args);
+
+            $("<p></p>")
+               .append (args .join (" "))
+               .appendTo (this .#console);
+
+            this .#console .scrollTop (this .#console .prop ("scrollHeight"));
+         };
+      }
+   }
+
+   restoreConsole ()
+   {
+      for (const fn of this .#consoleKeys)
+         console [fn] = this .#consoleFunctions [fn];
+   }
+
    reset ()
    {
       this .#model .setValue ($(this) .text () .trim ());
+      this .#console .empty ();
    }
 }
 
