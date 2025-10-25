@@ -152,9 +152,10 @@ class X3DScriptAreaElement extends HTMLElement
          .text ("Run")
          .appendTo (this .#buttons);
 
-      this .#run = $("<button></button>")
+      this .#reset = $("<button></button>")
          .addClass ("button")
          .text ("Reset")
+         .on ("click", () => this .reset ())
          .appendTo (this .#buttons);
 
       this .#output = $("<div></div>")
@@ -201,7 +202,7 @@ class X3DScriptAreaElement extends HTMLElement
       this .#editor  = editor;
       this .#model   = model;
 
-      model .setValue ($(this) .text () .trim ());
+      this .reset ();
    }
 
    changeColorScheme ()
@@ -232,6 +233,10 @@ class X3DScriptAreaElement extends HTMLElement
       }
    }
 
+   reset ()
+   {
+      this .#model .setValue ($(this) .text () .trim ());
+   }
 }
 
 customElements .define ("x3d-script-area", X3DScriptAreaElement);
