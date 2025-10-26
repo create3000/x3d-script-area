@@ -135,6 +135,7 @@ class X3DScriptAreaElement extends HTMLElement
    padding: 8px;
    font-family: monospace;
    font-size: 10pt;
+   line-height: 1.2;
 }
 
 .output p {
