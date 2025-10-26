@@ -297,10 +297,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .changeColorScheme ();
 
-      const observer = new MutationObserver (() =>
-      {
-         this .changeColorScheme ();
-      });
+      const observer = new MutationObserver (() => this .changeColorScheme ());
 
       observer .observe ($("html") .get (0),
       {
