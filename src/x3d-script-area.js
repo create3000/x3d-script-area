@@ -73,7 +73,7 @@ class X3DScriptAreaElement extends HTMLElement
 .title {
    box-sizing: border-box;
    flex: 0 0 auto;
-   padding: 8px;
+   padding: 8px 12px;
    font-family: sans-serif;
    font-weight: bold;
    color: var(--text-color);
