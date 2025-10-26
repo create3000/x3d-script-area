@@ -43,6 +43,7 @@ class X3DScriptAreaElement extends HTMLElement
    --text-color: rgb(52, 52, 60);
    --border-color: rgb(190, 190, 190);
    --highlight-color: rgba(0, 0, 0, 0.1);
+   --highlight-bg-color: #f6f8fa;
 }
 
 .area.dark {
@@ -54,6 +55,7 @@ class X3DScriptAreaElement extends HTMLElement
    --text-color: rgb(175 176 177);
    --border-color: rgb(68, 68, 68);
    --highlight-color: rgba(255, 255, 255, 0.1);
+   --highlight-bg-color: #151515;
 }
 
 .area {
@@ -64,6 +66,7 @@ class X3DScriptAreaElement extends HTMLElement
    height: 100%;
    border: 1px solid var(--border-color);
    border-radius: 10px;
+   background-color: var(--highlight-bg-color);
    font-size: 12pt;
 }
 
