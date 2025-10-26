@@ -35,12 +35,22 @@ class X3DScriptAreaElement extends HTMLElement
 }
 
 .area.light {
+   --system-red: rgb(255, 56, 60);
+   --system-yellow: rgb(255, 204, 0);
+   --system-green: rgb(52, 199, 89);
+   --system-blue: rgb(0, 136, 255);
+
    --text-color: #272727;
    --border-color: rgb(190, 190, 190);
    --highlight-color: rgba(0, 0, 0, 0.1);
 }
 
 .area.dark {
+   --system-red: rgb(255, 66, 69);
+   --system-yellow: rgb(255, 214, 0);
+   --system-green: rgb(48, 209, 88);
+   --system-blue: rgb(0, 145, 255);
+
    --text-color: rgb(206, 206, 206);
    --border-color: rgb(68, 68, 68);
    --highlight-color: rgba(255, 255, 255, 0.1);
@@ -129,6 +139,18 @@ class X3DScriptAreaElement extends HTMLElement
 
 .output p {
    margin: 1px 0;
+}
+
+.output p.error {
+   color: var(--system-red);
+}
+
+.output p.warn {
+   color: var(--system-yellow);
+}
+
+.output p.info {
+   color: var(--system-blue);
 }
 
 .output p.splitter {
@@ -268,14 +290,15 @@ class X3DScriptAreaElement extends HTMLElement
          this .wrapConsole ();
 
          script .getValue () .evaluate (text);
-
-         this .#output .append ($("<p></p>") .addClass ("splitter"));
-
-         this .restoreConsole ();
       }
       catch (error)
       {
          console .error (error);
+      }
+      finally
+      {
+         this .#output .append ($("<p></p>") .addClass ("splitter"));
+         this .restoreConsole ();
       }
    }
 
@@ -293,7 +316,8 @@ class X3DScriptAreaElement extends HTMLElement
             fn .call (console, ... args);
 
             $("<p></p>")
-               .append (args .join (" "))
+               .addClass (key)
+               .text (args .join (" "))
                .appendTo (this .#output);
 
             this .#output .scrollTop (this .#output .prop ("scrollHeight"));
