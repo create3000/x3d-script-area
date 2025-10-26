@@ -41,7 +41,7 @@ class X3DScriptAreaElement extends HTMLElement
    --system-blue: rgb(0, 136, 255);
 
    --text-color: rgb(52, 52, 60);
-   --border-color: rgb(190, 190, 190);
+   --border-color: #ececec;
    --highlight-color: rgba(0, 0, 0, 0.1);
    --highlight-bg-color: #f6f8fa;
 }
@@ -53,7 +53,7 @@ class X3DScriptAreaElement extends HTMLElement
    --system-blue: rgb(0, 145, 255);
 
    --text-color: rgb(175 176 177);
-   --border-color: rgb(68, 68, 68);
+   --border-color: #2d2d2d;
    --highlight-color: rgba(255, 255, 255, 0.1);
    --highlight-bg-color: #151515;
 }
