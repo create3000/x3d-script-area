@@ -380,6 +380,8 @@ class X3DScriptAreaElement extends HTMLElement
       finally
       {
          this .restoreConsole ();
+
+         X3DScriptAreaElement .#scene .rootNodes .length = 0;
       }
    }
 
