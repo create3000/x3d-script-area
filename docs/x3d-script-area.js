@@ -262,12 +262,14 @@ class X3DScriptAreaElement extends HTMLElement
          .appendTo (this .#bottom);
 
       this .#run = $("<button></button>")
+         .attr ("title", "Run example and show console output.")
          .addClass ("button")
          .text ("Run")
          .on ("click", () => this .run ())
          .appendTo (this .#buttons);
 
       this .#reset = $("<button></button>")
+         .attr ("title", "Reset example and clear console output.")
          .addClass ("button")
          .text ("Reset")
          .on ("click", () => this .reset ())
@@ -278,6 +280,7 @@ class X3DScriptAreaElement extends HTMLElement
          .appendTo (this .#bottom);
 
       this .#output = $("<div></div>")
+         .attr ("title", "Shows console output.")
          .addClass ("output")
          .appendTo (this .#console);
 
@@ -385,7 +388,7 @@ class X3DScriptAreaElement extends HTMLElement
 
             $("<p></p>")
                .addClass (key)
-               .text (args .join (" "))
+               .text (`> ${args .join (" ")}`)
                .appendTo (this .#output);
 
             this .#output .scrollTop (this .#output .prop ("scrollHeight"));
