@@ -21,6 +21,10 @@
   "type": "commonjs",
   "main": "src/x3d-script-area-js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "node build/release.js"
+  },
+  "devDependencies": {
+    "shell-tools": "^1.1.9"
   }
 }
