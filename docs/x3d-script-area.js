@@ -201,10 +201,10 @@ class X3DScriptAreaElement extends HTMLElement
    flex: 1 1 auto;
    height: 100%;
    border-left: 1px solid var(--border-color);
-   white-space: pre;
 }
 
 .output {
+   overflow-y: scroll;
    box-sizing: border-box;
    overflow: auto;
    width: 100%;
@@ -217,6 +217,8 @@ class X3DScriptAreaElement extends HTMLElement
    font-family: monospace;
    font-size: 10pt;
    line-height: 1.2;
+   white-space: pre-wrap;
+   overflow-wrap: break-word;
 }
 
 .output p {
@@ -359,8 +361,10 @@ class X3DScriptAreaElement extends HTMLElement
       }
    }
 
-   run ()
+   async run ()
    {
+      let r;
+
       try
       {
          const
@@ -371,7 +375,9 @@ class X3DScriptAreaElement extends HTMLElement
 
          this .wrapConsole ();
 
-         script .getValue () .evaluate (text);
+         const run = script .getValue () .evaluate (`const run = async function () { ${text} \n};\nrun;`);
+
+         await run ();
       }
       catch (error)
       {
