@@ -109,6 +109,7 @@ class X3DScriptAreaElement extends HTMLElement
    display: block;
    width: 100%;
    height: 360px;
+   margin: 1rem 0;
 }
 
 .area.light {
