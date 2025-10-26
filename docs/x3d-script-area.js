@@ -309,6 +309,7 @@ class X3DScriptAreaElement extends HTMLElement
             wrappingIndent: "indent",
             minimap: { enabled: false },
             bracketPairColorization: { enabled: true },
+            scrollBeyondLastLine: false,
          });
 
       this .#editor = editor;
