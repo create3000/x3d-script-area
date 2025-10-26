@@ -156,15 +156,6 @@ class X3DScriptAreaElement extends HTMLElement
 .output p.info {
    color: var(--system-blue);
 }
-
-.output p.splitter {
-   margin: 5px 0;
-   border-top: 1px solid var(--border-color);
-}
-
-.output p.splitter:last-child {
-   display: none;
-}
       `)
       .appendTo (shadow);
 
@@ -291,6 +282,8 @@ class X3DScriptAreaElement extends HTMLElement
             script = this .#scene .createNode ("Script"),
             text   = this .#editor .getValue ();
 
+         this .#output .empty ();
+
          this .wrapConsole ();
 
          script .getValue () .evaluate (text);
@@ -301,7 +294,6 @@ class X3DScriptAreaElement extends HTMLElement
       }
       finally
       {
-         this .#output .append ($("<p></p>") .addClass ("splitter"));
          this .restoreConsole ();
       }
    }
