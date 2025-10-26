@@ -7,7 +7,7 @@ const { sh, systemSync } = require ("shell-tools");
 function main ()
 {
    // dist
-   systemSync (`cp src/* dist/`);
+   systemSync (`cp src/* docs/`);
 
    // commit
    systemSync (`git add -A`);
