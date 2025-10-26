@@ -5,14 +5,91 @@ require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${M
 
 class X3DScriptAreaElement extends HTMLElement
 {
+   static #monaco;
    static #canvas;
+   static #browser;
+   static #scene;
 
-   #browser;
-   #scene;
+   static {
+      this .setup ();
+   }
+
+   static async setup ()
+   {
+      this .#monaco = new Promise (resolve => require (["vs/editor/editor.main"], () => resolve ()));
+
+      this .#canvas  = X3D .createBrowser (),
+      this .#browser = this .#canvas .browser;
+      this .#scene   = await this .#browser .createScene (this .#browser .getProfile ("Full"));
+
+      this .addDeclarations ();
+   }
+
+   static #internalTypes = new Set ([
+      "SFBool",
+      "SFDouble",
+      "SFFloat",
+      "SFInt32",
+      "SFString",
+      "SFTime",
+   ]);
+
+   static async addDeclarations ()
+   {
+      const
+         response     = await fetch ("https://cdn.jsdelivr.net/npm/x_ite@12.1.3/dist/x_ite.d.ts"),
+         text         = await response .text (),
+         declarations = text .replace (/^.*?(?:export.*?;)/s, "");
+
+      monaco .languages .typescript .javascriptDefaults .setExtraLibs ([
+      {
+         content: /* ts */ `
+            ${declarations};
+            declare const Browser: X3D .X3DBrowser;
+            declare const X3DConstants: X3D .X3DConstants;
+            declare const X3DBrowser: typeof X3D. X3DBrowser;
+            declare const X3DExecutionContext: typeof X3D. X3DExecutionContext;
+            declare const X3DScene: typeof X3D. X3DScene;
+            declare const ComponentInfo: typeof X3D. ComponentInfo;
+            declare const ComponentInfoArray: typeof X3D. ComponentInfoArray;
+            declare const ProfileInfo: typeof X3D. ProfileInfo;
+            declare const ProfileInfoArray: typeof X3D. ProfileInfoArray;
+            declare const ConcreteNodesArray: typeof X3D. ConcreteNodesArray;
+            declare const AbstractNodesArray: typeof X3D. AbstractNodesArray;
+            declare const UnitInfo: typeof X3D. UnitInfo;
+            declare const UnitInfoArray: typeof X3D. UnitInfoArray;
+            declare const NamedNodesArray: typeof X3D. NamedNodesArray;
+            declare const ImportedNodesArray: typeof X3D. ImportedNodesArray;
+            declare const X3DImportedNode: typeof X3D. X3DImportedNode;
+            declare const ExportedNodesArray: typeof X3D. ExportedNodesArray;
+            declare const X3DExportedNode: typeof X3D. X3DExportedNode;
+            declare const ExternProtoDeclarationArray: typeof X3D. ExternProtoDeclarationArray;
+            declare const ProtoDeclarationArray: typeof X3D. ProtoDeclarationArray;
+            declare const X3DExternProtoDeclaration: typeof X3D. X3DExternProtoDeclaration;
+            declare const X3DProtoDeclaration: typeof X3D. X3DProtoDeclaration;
+            declare const X3DProtoDeclarationNode: typeof X3D. X3DProtoDeclarationNode;
+            declare const RouteArray: typeof X3D. RouteArray;
+            declare const X3DRoute: typeof X3D. X3DRoute;
+            declare const X3DFieldDefinition: typeof X3D. X3DFieldDefinition;
+            declare const FieldDefinitionArray: typeof X3D. FieldDefinitionArray;
+            declare const X3DField: typeof X3D. X3DField;
+            declare const X3DArrayField: typeof X3D. X3DArrayField;
+            ${Array .from (X3DScriptAreaElement .#browser .fieldTypes)
+               .filter (type => !this .#internalTypes .has (type .typeName))
+               .map (type => `declare const ${type .typeName}: typeof X3D .${type .typeName};`)
+               .join ("\n")}
+            declare const TRUE: true;
+            declare const FALSE: false;
+            declare const NULL: null;
+            declare function print (... args: any []): void;
+         `,
+      }]);
+   }
+
    #editor;
    #model;
    #area;
-   #title;
+   #name;
    #editable;
    #bottom;
    #buttons;
@@ -70,10 +147,10 @@ class X3DScriptAreaElement extends HTMLElement
    font-size: 12pt;
 }
 
-.title {
+.name {
    box-sizing: border-box;
    flex: 0 0 auto;
-   padding: 8px;
+   padding: 8px 12px;
    font-family: sans-serif;
    font-weight: bold;
    color: var(--text-color);
@@ -156,15 +233,6 @@ class X3DScriptAreaElement extends HTMLElement
 .output p.info {
    color: var(--system-blue);
 }
-
-.output p.splitter {
-   margin: 5px 0;
-   border-top: 1px solid var(--border-color);
-}
-
-.output p.splitter:last-child {
-   display: none;
-}
       `)
       .appendTo (shadow);
 
@@ -177,8 +245,8 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("area")
          .appendTo (shadow);
 
-      this .#title = $("<div></div>")
-         .addClass ("title")
+      this .#name = $("<div></div>")
+         .addClass ("name")
          .appendTo (this .#area);
 
       this .#editable = $("<div></div>")
@@ -213,7 +281,7 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("output")
          .appendTo (this .#console);
 
-      require (["vs/editor/editor.main"], () => this .setup ());
+      X3DScriptAreaElement .#monaco .then (() => this .setup ());
    }
 
    async setup ()
@@ -229,7 +297,6 @@ class X3DScriptAreaElement extends HTMLElement
       // Editor
 
       const
-         canvas = X3DScriptAreaElement .#canvas ??= X3D .createBrowser (),
          model  = monaco .editor .createModel ("", "javascript"),
          editor = monaco .editor .create (this .#editable .get (0),
          {
@@ -244,13 +311,8 @@ class X3DScriptAreaElement extends HTMLElement
             bracketPairColorization: { enabled: true },
          });
 
-      this .#browser = canvas .browser;
-      this .#editor  = editor;
-      this .#model   = model;
-
-      // Scene
-
-      this .#scene = await this .#browser .createScene (this .#browser .getProfile ("Full"));
+      this .#editor = editor;
+      this .#model  = model;
 
       this .reset ();
    }
@@ -268,16 +330,16 @@ class X3DScriptAreaElement extends HTMLElement
    }
 
    static observedAttributes = [
-      "title",
+      "name",
    ];
 
    attributeChangedCallback (name, oldValue, newValue)
    {
       switch (name)
       {
-         case "title":
+         case "name":
          {
-            this .#title .text (newValue);
+            this .#name .text (newValue);
             break;
          }
       }
@@ -288,8 +350,10 @@ class X3DScriptAreaElement extends HTMLElement
       try
       {
          const
-            script = this .#scene .createNode ("Script"),
+            script = X3DScriptAreaElement .#scene .createNode ("Script"),
             text   = this .#editor .getValue ();
+
+         this .#output .empty ();
 
          this .wrapConsole ();
 
@@ -301,7 +365,6 @@ class X3DScriptAreaElement extends HTMLElement
       }
       finally
       {
-         this .#output .append ($("<p></p>") .addClass ("splitter"));
          this .restoreConsole ();
       }
    }

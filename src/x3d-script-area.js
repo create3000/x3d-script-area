@@ -89,7 +89,7 @@ class X3DScriptAreaElement extends HTMLElement
    #editor;
    #model;
    #area;
-   #header;
+   #name;
    #editable;
    #bottom;
    #buttons;
@@ -147,7 +147,7 @@ class X3DScriptAreaElement extends HTMLElement
    font-size: 12pt;
 }
 
-.header {
+.name {
    box-sizing: border-box;
    flex: 0 0 auto;
    padding: 8px 12px;
@@ -245,8 +245,8 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("area")
          .appendTo (shadow);
 
-      this .#header = $("<div></div>")
-         .addClass ("header")
+      this .#name = $("<div></div>")
+         .addClass ("name")
          .appendTo (this .#area);
 
       this .#editable = $("<div></div>")
@@ -330,16 +330,16 @@ class X3DScriptAreaElement extends HTMLElement
    }
 
    static observedAttributes = [
-      "header",
+      "name",
    ];
 
    attributeChangedCallback (name, oldValue, newValue)
    {
       switch (name)
       {
-         case "header":
+         case "name":
          {
-            this .#header .text (newValue);
+            this .#name .text (newValue);
             break;
          }
       }
