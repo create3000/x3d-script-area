@@ -218,7 +218,7 @@ class X3DScriptAreaElement extends HTMLElement
    font-size: 10pt;
    line-height: 1.2;
    white-space: pre-wrap;
-   overflow-wrap: break-word;
+   overflow-wrap: anywhere;
 }
 
 .output p {
