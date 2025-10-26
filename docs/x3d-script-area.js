@@ -205,7 +205,7 @@ class X3DScriptAreaElement extends HTMLElement
 
 .output {
    box-sizing: border-box;
-   overflow: scroll;
+   overflow: auto;
    width: 100%;
    height: 100%;
    background: none;
