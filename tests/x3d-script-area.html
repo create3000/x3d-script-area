@@ -24,14 +24,13 @@ x3d-script-area {
     </style>
   </head>
   <body>
-    <x3d-script-area name="X3D ECMAScript Demo: SFRotation slerp">
+    <x3d-script-area name="X3D ECMAScript Demo: Browser createScene">
 <pre>
-const a = new SFRotation (1, 2, 3, 4);
-const b = new SFRotation (2, 3, 4, 5);
+const profile    = Browser .getProfile ("Interactive");
+const components = [Browser .getComponent ("Geometry2D"), Browser .getComponent ("Scripting")];
+const scene      = await Browser .createScene (profile, ... components);
 
-print (a);
-print (b);
-print (a .slerp (b, 0.5));
+print (scene .profile .name);
 </pre>
     </x3d-script-area>
     <x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
