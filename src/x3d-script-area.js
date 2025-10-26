@@ -201,6 +201,7 @@ class X3DScriptAreaElement extends HTMLElement
    flex: 1 1 auto;
    height: 100%;
    border-left: 1px solid var(--border-color);
+   white-space: pre;
 }
 
 .output {
