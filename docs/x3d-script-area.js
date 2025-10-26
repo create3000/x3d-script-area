@@ -201,6 +201,7 @@ class X3DScriptAreaElement extends HTMLElement
    flex: 1 1 auto;
    height: 100%;
    border-left: 1px solid var(--border-color);
+   white-space: pre;
 }
 
 .output {
@@ -297,10 +298,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .changeColorScheme ();
 
-      const observer = new MutationObserver (() =>
-      {
-         this .changeColorScheme ();
-      });
+      const observer = new MutationObserver (() => this .changeColorScheme ());
 
       observer .observe ($("html") .get (0),
       {
