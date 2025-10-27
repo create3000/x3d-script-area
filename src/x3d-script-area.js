@@ -10,11 +10,6 @@ class X3DScriptAreaElement extends HTMLElement
    static #monaco;
 
    static {
-      this .setup ();
-   }
-
-   static async setup ()
-   {
       // X3D
 
       this .#canvas  = X3D .createBrowser (),
