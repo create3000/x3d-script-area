@@ -7,7 +7,6 @@ class X3DScriptAreaElement extends HTMLElement
 {
    static #canvas;
    static #browser;
-   static #monaco;
 
    static {
       // X3D
@@ -16,8 +15,6 @@ class X3DScriptAreaElement extends HTMLElement
       this .#browser = this .#canvas .browser;
 
       // Monaco
-
-      this .#monaco = new Promise (resolve => require (["vs/editor/editor.main"], () => resolve ()));
 
       this .addDeclarations ();
    }
@@ -285,7 +282,7 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("output")
          .appendTo (this .#console);
 
-      X3DScriptAreaElement .#monaco .then (() => this .setup ());
+      require (["vs/editor/editor.main"], () => this .setup ());
    }
 
    async setup ()
