@@ -5,9 +5,9 @@ require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${M
 
 class X3DScriptAreaElement extends HTMLElement
 {
-   static #monaco;
    static #canvas;
    static #browser;
+   static #monaco;
 
    static {
       this .setup ();
@@ -15,10 +15,14 @@ class X3DScriptAreaElement extends HTMLElement
 
    static async setup ()
    {
-      this .#monaco = new Promise (resolve => require (["vs/editor/editor.main"], () => resolve ()));
+      // X3D
 
       this .#canvas  = X3D .createBrowser (),
       this .#browser = this .#canvas .browser;
+
+      // Monaco
+
+      this .#monaco = new Promise (resolve => require (["vs/editor/editor.main"], () => resolve ()));
 
       this .addDeclarations ();
    }
