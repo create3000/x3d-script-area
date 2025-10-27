@@ -1,6 +1,6 @@
 const MONACO_VERSION = $(`script[src*="monaco-editor"]`) .attr ("src") .match (/\/monaco-editor(@?.*?)\//) [1];
 
-// Also change version on the website!
+// Use version from website:
 require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs` }});
 
 class X3DScriptAreaElement extends HTMLElement
@@ -97,131 +97,9 @@ class X3DScriptAreaElement extends HTMLElement
 
       const shadow = $(this .attachShadow ({ mode: "open" }));
 
-      $("<style></style>") .text (/* CSS */ `
-:host {
-   display: block;
-   width: 100%;
-   height: 390px;
-   margin: 1rem 0;
-}
-
-.area.light {
-   --system-red: rgb(255, 56, 60);
-   --system-yellow: rgb(255, 204, 0);
-   --system-green: rgb(52, 199, 89);
-   --system-blue: rgb(0, 136, 255);
-
-   --text-color: rgb(52, 52, 60);
-   --border-color: #ececec;
-   --highlight-color: rgba(0, 0, 0, 0.1);
-   --highlight-bg-color: #f6f8fa;
-}
-
-.area.dark {
-   --system-red: rgb(255, 66, 69);
-   --system-yellow: rgb(255, 214, 0);
-   --system-green: rgb(48, 209, 88);
-   --system-blue: rgb(0, 145, 255);
-
-   --text-color: rgb(175 176 177);
-   --border-color: #2d2d2d;
-   --highlight-color: rgba(255, 255, 255, 0.1);
-   --highlight-bg-color: #151515;
-}
-
-.area {
-   box-sizing: border-box;
-   display: flex;
-   flex-direction: column;
-   width: 100%;
-   height: 100%;
-   border: 1px solid var(--border-color);
-   border-radius: 10px;
-   background-color: var(--highlight-bg-color);
-   font-size: 12pt;
-}
-
-.name {
-   box-sizing: border-box;
-   flex: 0 0 auto;
-   padding: 8px 12px;
-   font-family: sans-serif;
-   font-weight: bold;
-   color: var(--text-color);
-}
-
-.editor {
-   box-sizing: border-box;
-   flex: 1 1 auto;
-   border-top: 1px solid var(--border-color);
-   border-bottom: 1px solid var(--border-color);
-   width: 100%;
-}
-
-.bottom {
-   box-sizing: border-box;
-   display: flex;
-   flex: 0 0 auto;
-   height: 120px;
-}
-
-.buttons {
-   box-sizing: border-box;
-   display: flex;
-   flex-direction: column;
-   flex: 0 0 auto;
-   width: 10%;
-}
-
-.button {
-   cursor: pointer;
-   flex: 0 0 auto;
-   padding: 8px;
-   font-size: 9pt;
-   font-family: sans-serif;
-   font-weight: bold;
-   color: var(--text-color);
-   border: none;
-   border-bottom: 1px solid var(--border-color);
-   background: none;
-}
-
-.button:hover {
-   background: var(--highlight-color);
-}
-
-.output {
-   box-sizing: border-box;
-   flex: 1 1 auto;
-   overflow: auto;
-   width: 100%;
-   height: 100%;
-   border-left: 1px solid var(--border-color);
-   padding: 8px;
-   font-family: monospace;
-   font-size: 10pt;
-   line-height: 1.2;
-   white-space: pre-wrap;
-   overflow-wrap: break-word;
-}
-
-.output p {
-   margin: 1px 0;
-}
-
-.output p.error {
-   color: var(--system-red);
-}
-
-.output p.warn {
-   color: var(--system-yellow);
-}
-
-.output p.info {
-   color: var(--system-blue);
-}
-      `)
-      .appendTo (shadow);
+      $("<style></style>")
+         .text (X3DScriptAreaElement .#css)
+         .appendTo (shadow);
 
       $("<link/>")
          .attr ("rel", "stylesheet")
@@ -408,6 +286,130 @@ class X3DScriptAreaElement extends HTMLElement
       this .#model .setValue ($(this) .text () .trim ());
       this .#output .empty ();
    }
+
+   static #css = /* CSS */ `
+:host {
+   display: block;
+   width: 100%;
+   height: 390px;
+   margin: 1rem 0;
+}
+
+.area.light {
+   --system-red: rgb(255, 56, 60);
+   --system-yellow: rgb(255, 204, 0);
+   --system-green: rgb(52, 199, 89);
+   --system-blue: rgb(0, 136, 255);
+
+   --text-color: rgb(52, 52, 60);
+   --border-color: #ececec;
+   --highlight-color: rgba(0, 0, 0, 0.1);
+   --highlight-bg-color: #f6f8fa;
+}
+
+.area.dark {
+   --system-red: rgb(255, 66, 69);
+   --system-yellow: rgb(255, 214, 0);
+   --system-green: rgb(48, 209, 88);
+   --system-blue: rgb(0, 145, 255);
+
+   --text-color: rgb(175 176 177);
+   --border-color: #2d2d2d;
+   --highlight-color: rgba(255, 255, 255, 0.1);
+   --highlight-bg-color: #151515;
+}
+
+.area {
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   height: 100%;
+   border: 1px solid var(--border-color);
+   border-radius: 10px;
+   background-color: var(--highlight-bg-color);
+   font-size: 12pt;
+}
+
+.name {
+   box-sizing: border-box;
+   flex: 0 0 auto;
+   padding: 8px 12px;
+   font-family: sans-serif;
+   font-weight: bold;
+   color: var(--text-color);
+}
+
+.editor {
+   box-sizing: border-box;
+   flex: 1 1 auto;
+   border-top: 1px solid var(--border-color);
+   border-bottom: 1px solid var(--border-color);
+   width: 100%;
+}
+
+.bottom {
+   box-sizing: border-box;
+   display: flex;
+   flex: 0 0 auto;
+   height: 120px;
+}
+
+.buttons {
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column;
+   flex: 0 0 auto;
+   width: 10%;
+}
+
+.button {
+   cursor: pointer;
+   flex: 0 0 auto;
+   padding: 8px;
+   font-size: 9pt;
+   font-family: sans-serif;
+   font-weight: bold;
+   color: var(--text-color);
+   border: none;
+   border-bottom: 1px solid var(--border-color);
+   background: none;
+}
+
+.button:hover {
+   background: var(--highlight-color);
+}
+
+.output {
+   box-sizing: border-box;
+   flex: 1 1 auto;
+   overflow: auto;
+   width: 100%;
+   height: 100%;
+   border-left: 1px solid var(--border-color);
+   padding: 8px;
+   font-family: monospace;
+   font-size: 10pt;
+   line-height: 1.2;
+   white-space: pre-wrap;
+   overflow-wrap: break-word;
+}
+
+.output p {
+   margin: 1px 0;
+}
+
+.output p.error {
+   color: var(--system-red);
+}
+
+.output p.warn {
+   color: var(--system-yellow);
+}
+
+.output p.info {
+   color: var(--system-blue);
+}`;
 }
 
 customElements .define ("x3d-script-area", X3DScriptAreaElement);
