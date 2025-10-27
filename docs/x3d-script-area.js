@@ -89,7 +89,6 @@ class X3DScriptAreaElement extends HTMLElement
    #buttons;
    #run;
    #reset;
-   #console;
    #output;
 
    constructor ()
@@ -163,7 +162,7 @@ class X3DScriptAreaElement extends HTMLElement
    box-sizing: border-box;
    display: flex;
    flex: 0 0 auto;
-   height: 30%;
+   height: 120px;
 }
 
 .buttons {
@@ -191,29 +190,19 @@ class X3DScriptAreaElement extends HTMLElement
    background: var(--highlight-color);
 }
 
-.console {
+.output {
    box-sizing: border-box;
    flex: 1 1 auto;
-   height: 100%;
-   border-left: 1px solid var(--border-color);
-}
-
-.output {
-   overflow-y: scroll;
-   box-sizing: border-box;
    overflow: auto;
    width: 100%;
    height: 100%;
-   background: none;
-   outline: none;
-   border: none;
-   resize: none;
+   border-left: 1px solid var(--border-color);
    padding: 8px;
    font-family: monospace;
    font-size: 10pt;
    line-height: 1.2;
    white-space: pre-wrap;
-   overflow-wrap: anywhere;
+   overflow-wrap: break-word;
 }
 
 .output p {
@@ -273,14 +262,10 @@ class X3DScriptAreaElement extends HTMLElement
          .on ("click", () => this .reset ())
          .appendTo (this .#buttons);
 
-      this .#console = $("<div></div>")
-         .addClass ("console")
-         .appendTo (this .#bottom);
-
       this .#output = $("<div></div>")
          .attr ("title", "Shows console output.")
          .addClass ("output")
-         .appendTo (this .#console);
+         .appendTo (this .#bottom);
 
       require (["vs/editor/editor.main"], () => this .setup ());
    }
@@ -301,7 +286,7 @@ class X3DScriptAreaElement extends HTMLElement
       {
          attributes: true,
          attributeFilter: ["data-mode"],
-         attributeOldValue: true,
+         attributeOldValue: false,
       });
 
       // Editor
@@ -320,6 +305,7 @@ class X3DScriptAreaElement extends HTMLElement
             minimap: { enabled: false },
             bracketPairColorization: { enabled: true },
             scrollBeyondLastLine: false,
+            hover: { enabled: true },
          });
 
       this .#editor = editor;
