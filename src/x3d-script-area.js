@@ -16,7 +16,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       // Monaco
 
-      this .addDeclarations ();
+      require (["vs/editor/editor.main"], () => this .addDeclarations ());
    }
 
    static #internalTypes = new Set ([
