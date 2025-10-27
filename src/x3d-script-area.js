@@ -8,7 +8,6 @@ class X3DScriptAreaElement extends HTMLElement
    static #monaco;
    static #canvas;
    static #browser;
-   static #scene;
 
    static {
       this .setup ();
@@ -20,7 +19,6 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .#canvas  = X3D .createBrowser (),
       this .#browser = this .#canvas .browser;
-      this .#scene   = await this .#browser .createScene (this .#browser .getProfile ("Full"));
 
       this .addDeclarations ();
    }
@@ -364,13 +362,15 @@ class X3DScriptAreaElement extends HTMLElement
 
    async run ()
    {
-      let r;
-
       try
       {
          const
-            script = X3DScriptAreaElement .#scene .createNode ("Script"),
-            text   = this .#editor .getValue ();
+            browser = X3DScriptAreaElement .#browser,
+            scene   = await browser .createScene (browser .getProfile ("Full")),
+            script  = scene .createNode ("Script"),
+            text    = this .#editor .getValue ();
+
+         await browser .replaceWorld (scene);
 
          this .#output .empty ();
 
@@ -389,7 +389,6 @@ class X3DScriptAreaElement extends HTMLElement
          this .restoreConsole ();
 
          X3DScriptAreaElement .#browser .getBrowserOptions () .reset ();
-         X3DScriptAreaElement .#scene .rootNodes .length = 0;
       }
    }
 
