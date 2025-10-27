@@ -35,12 +35,17 @@ print (scene .profile .name);
     </x3d-script-area>
     <x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
 <pre>
-const a = new SFVec3f (1, 2, 3);
-const b = new SFVec3f (2, 3, 4);
+const scene = await Browser .createX3DFromString (`#X3D V4.0 utf8
+PROFILE Interchange
+PROTO MyBox [ ]
+{
+  Shape { geometry Box { } }
+}
+`);
 
-print (a);
-print (b);
-print (a .lerp (b, 0.5));
+print (scene .createProto ("MyBox"));
+
+// Expected output: MyBox { }
 </pre>
     </x3d-script-area>
   </body>

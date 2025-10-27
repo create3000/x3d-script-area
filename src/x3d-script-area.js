@@ -101,7 +101,7 @@ class X3DScriptAreaElement extends HTMLElement
 :host {
    display: block;
    width: 100%;
-   height: 360px;
+   height: 390px;
    margin: 1rem 0;
 }
 
