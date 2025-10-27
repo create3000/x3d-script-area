@@ -5,20 +5,16 @@ require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${M
 
 class X3DScriptAreaElement extends HTMLElement
 {
-   static #monaco;
    static #canvas;
    static #browser;
 
    static {
-      this .setup ();
-   }
-
-   static async setup ()
-   {
-      this .#monaco = new Promise (resolve => require (["vs/editor/editor.main"], () => resolve ()));
+      // X3D
 
       this .#canvas  = X3D .createBrowser (),
       this .#browser = this .#canvas .browser;
+
+      // Monaco
 
       this .addDeclarations ();
    }
@@ -286,7 +282,7 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("output")
          .appendTo (this .#console);
 
-      X3DScriptAreaElement .#monaco .then (() => this .setup ());
+      require (["vs/editor/editor.main"], () => this .setup ());
    }
 
    async setup ()
