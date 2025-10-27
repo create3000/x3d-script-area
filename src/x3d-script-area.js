@@ -301,7 +301,7 @@ class X3DScriptAreaElement extends HTMLElement
       {
          attributes: true,
          attributeFilter: ["data-mode"],
-         attributeOldValue: true,
+         attributeOldValue: false,
       });
 
       // Editor
