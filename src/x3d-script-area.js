@@ -320,6 +320,7 @@ class X3DScriptAreaElement extends HTMLElement
             minimap: { enabled: false },
             bracketPairColorization: { enabled: true },
             scrollBeyondLastLine: false,
+            hover: { enabled: true },
          });
 
       this .#editor = editor;
