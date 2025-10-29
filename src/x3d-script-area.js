@@ -119,6 +119,7 @@ class X3DScriptAreaElement extends HTMLElement
       //    .appendTo (this .#area);
 
       // Start Workaround
+      // https://github.com/microsoft/monaco-editor/issues/3241#issuecomment-1368842346
 
       $("<slot></slot>")
          .addClass ("editor")
