@@ -31,6 +31,7 @@ const components = [Browser .getComponent ("Geometry2D"), Browser .getComponent 
 const scene      = await Browser .createScene (profile, ... components);
 
 print (scene .profile .name);
+print (Browser .currentScene .createNode ("InstancedShape"))
 </pre>
     </x3d-script-area>
     <x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
