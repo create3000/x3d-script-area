@@ -349,24 +349,18 @@ class X3DScriptAreaElement extends HTMLElement
 .name {
    box-sizing: border-box;
    flex: 0 0 auto;
+   border-bottom: 1px solid var(--border-color);
    padding: 8px 12px;
    font-family: sans-serif;
    font-weight: bold;
    color: var(--text-color);
 }
 
-.editor {
-   box-sizing: border-box;
-   flex: 1 1 auto;
-   border-top: 1px solid var(--border-color);
-   border-bottom: 1px solid var(--border-color);
-   width: 100%;
-}
-
 .bottom {
    box-sizing: border-box;
    display: flex;
    flex: 0 0 auto;
+   border-top: 1px solid var(--border-color);
    height: 120px;
 }
 
