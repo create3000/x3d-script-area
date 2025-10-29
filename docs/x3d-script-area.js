@@ -101,10 +101,10 @@ class X3DScriptAreaElement extends HTMLElement
          .text (X3DScriptAreaElement .#css)
          .appendTo (shadow);
 
-      $("<link/>")
-         .attr ("rel", "stylesheet")
-         .attr ("href", `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs/editor/editor.main.css`)
-         .appendTo (shadow);
+      // $("<link/>")
+      //    .attr ("rel", "stylesheet")
+      //    .attr ("href", `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs/editor/editor.main.css`)
+      //    .appendTo (shadow);
 
       this .#area = $("<div></div>")
          .addClass ("area")
@@ -114,9 +114,26 @@ class X3DScriptAreaElement extends HTMLElement
          .addClass ("name")
          .appendTo (this .#area);
 
-      this .#editable = $("<div></div>")
+      // this .#editable = $("<div></div>")
+      //    .addClass ("editor")
+      //    .appendTo (this .#area);
+
+      // Start Workaround
+
+      $("<slot></slot>")
          .addClass ("editor")
+         .attr ("name", "editable")
          .appendTo (this .#area);
+
+      this .#editable = $("<div></div>")
+         .attr ("slot", "editable")
+         .appendTo (this);
+
+      $("<style></style>")
+         .text (`x3d-script-area [slot=editable] { flex: 1 1 auto }`)
+         .appendTo ($("html"));
+
+      // End Workaround
 
       this .#bottom = $("<div></div>")
          .addClass ("bottom")
@@ -226,7 +243,7 @@ class X3DScriptAreaElement extends HTMLElement
       {
          const
             browser = X3DScriptAreaElement .#browser,
-            scene   = await browser .createScene (browser .getProfile ("Full"), ... browser .supportedComponents),
+            scene   = await browser .createScene (browser .getProfile ("Full"), browser .getComponent ("X_ITE")),
             script  = scene .createNode ("Script"),
             text    = this .#editor .getValue ();
 
@@ -283,7 +300,7 @@ class X3DScriptAreaElement extends HTMLElement
 
    reset ()
    {
-      this .#model .setValue ($(this) .text () .trim ());
+      this .#model .setValue ($(this) .children (":not([slot])") .text () .trim ());
       this .#output .empty ();
    }
 
