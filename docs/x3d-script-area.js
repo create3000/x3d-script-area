@@ -226,7 +226,7 @@ class X3DScriptAreaElement extends HTMLElement
       {
          const
             browser = X3DScriptAreaElement .#browser,
-            scene   = await browser .createScene (browser .getProfile ("Full")),
+            scene   = await browser .createScene (browser .getProfile ("Full"), ... browser .supportedComponents),
             script  = scene .createNode ("Script"),
             text    = this .#editor .getValue ();
 
