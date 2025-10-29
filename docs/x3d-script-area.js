@@ -119,6 +119,7 @@ class X3DScriptAreaElement extends HTMLElement
       //    .appendTo (this .#area);
 
       // Start Workaround
+      // https://github.com/microsoft/monaco-editor/issues/3241#issuecomment-1368842346
 
       $("<slot></slot>")
          .addClass ("editor")
@@ -126,12 +127,9 @@ class X3DScriptAreaElement extends HTMLElement
          .appendTo (this .#area);
 
       this .#editable = $("<div></div>")
+         .css ("flex", "1 1 auto")
          .attr ("slot", "editable")
          .appendTo (this);
-
-      $("<style></style>")
-         .text (`x3d-script-area [slot=editable] { flex: 1 1 auto }`)
-         .appendTo ($("html"));
 
       // End Workaround
 
