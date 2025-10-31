@@ -225,7 +225,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .#editor = editor;
 
-      editor .onMouseMove  (() => setTimeout (() => this .changeModel ("javascript")));
+      editor .onMouseMove (() => setTimeout (() => this .changeModel ("javascript")));
 
       this .changeModel ("javascript-inactive");
       this .reset ();
