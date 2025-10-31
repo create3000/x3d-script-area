@@ -32,21 +32,21 @@ const scene      = await Browser .createScene (profile, ... components);
 
 print (scene .profile .name);
 print (Browser .currentScene .createNode ("InstancedShape"))
+
+const rotation = 123;
 </pre>
     </x3d-script-area>
     <x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
 <pre>
-const scene = await Browser .createX3DFromString (`#X3D V4.0 utf8
-PROFILE Interchange
-PROTO MyBox [ ]
-{
-  Shape { geometry Box { } }
-}
-`);
+const rotation = new SFRotation (0, 1, 0, Math .PI / 2);
+const vector   = new SFVec3f (0, 0, 1);
 
-print (scene .createProto ("MyBox"));
-
-// Expected output: MyBox { }
+print (rotation);
+print (vector);
+print (rotation .multVec (vector));
+// Expected output: 0 1 0 1.5707963267949
+// Expected output: 0 0 1
+// Expected output: 1 0 0
 </pre>
     </x3d-script-area>
   </body>
