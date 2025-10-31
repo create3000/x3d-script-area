@@ -169,6 +169,22 @@ class X3DScriptAreaElement extends HTMLElement
       require (["vs/editor/editor.main"], () => this .setup ());
    }
 
+   static observedAttributes = [
+      "name",
+   ];
+
+   attributeChangedCallback (name, oldValue, newValue)
+   {
+      switch (name)
+      {
+         case "name":
+         {
+            this .#name .text (newValue);
+            break;
+         }
+      }
+   }
+
    static #elements = [ ];
 
    async setup ()
@@ -215,6 +231,18 @@ class X3DScriptAreaElement extends HTMLElement
       this .reset ();
    }
 
+   changeColorScheme ()
+   {
+      const darkMode = (window .matchMedia ?.("(prefers-color-scheme: dark)") .matches
+         || $("html") .attr ("data-mode") === "dark") && ($("html") .attr ("data-mode") !== "light");
+
+      monaco .editor .setTheme (darkMode ? "vs-dark" : "vs-light");
+
+      this .#area
+         .removeClass (["light", "dark"])
+         .addClass (darkMode ? "dark" : "light");
+   }
+
    changeModel (language)
    {
       if (this .#model ?.getLanguageId () === language)
@@ -237,34 +265,6 @@ class X3DScriptAreaElement extends HTMLElement
 
       for (const element of X3DScriptAreaElement .#elements .filter (element => element !== this))
          element .changeModel ("javascript-inactive");
-   }
-
-   changeColorScheme ()
-   {
-      const darkMode = (window .matchMedia ?.("(prefers-color-scheme: dark)") .matches
-         || $("html") .attr ("data-mode") === "dark") && ($("html") .attr ("data-mode") !== "light");
-
-      monaco .editor .setTheme (darkMode ? "vs-dark" : "vs-light");
-
-      this .#area
-         .removeClass (["light", "dark"])
-         .addClass (darkMode ? "dark" : "light");
-   }
-
-   static observedAttributes = [
-      "name",
-   ];
-
-   attributeChangedCallback (name, oldValue, newValue)
-   {
-      switch (name)
-      {
-         case "name":
-         {
-            this .#name .text (newValue);
-            break;
-         }
-      }
    }
 
    async run ()
