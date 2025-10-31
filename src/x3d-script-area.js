@@ -225,6 +225,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .#editor = editor;
 
+      // Workaround to get multiple editors work on a page and don't affect each other, especially IntelliSense.
       editor .onMouseMove (() => setTimeout (() => this .changeModel ("javascript")));
 
       this .changeModel ("javascript-inactive");
