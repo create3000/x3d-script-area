@@ -30,6 +30,12 @@ class X3DScriptAreaElement extends HTMLElement
 
    static async addDeclarations ()
    {
+      const language = await monaco .languages .getLanguages () .find (l => l .id === "javascript") .loader ();
+
+      monaco .languages .register ({ id: "javascript-inactive" });
+      monaco .languages .setLanguageConfiguration ("javascript-inactive", language .conf);
+      monaco .languages .setMonarchTokensProvider ("javascript-inactive", language .language);
+
       const
          response     = await fetch ("https://cdn.jsdelivr.net/npm/x_ite@12.1.3/dist/x_ite.d.ts"),
          text         = await response .text (),
@@ -163,6 +169,8 @@ class X3DScriptAreaElement extends HTMLElement
       require (["vs/editor/editor.main"], () => this .setup ());
    }
 
+   static #elements = [ ];
+
    async setup ()
    {
       // Handle color scheme changes.
@@ -184,27 +192,51 @@ class X3DScriptAreaElement extends HTMLElement
 
       // Editor
 
-      const
-         model  = monaco .editor .createModel ("", "javascript"),
-         editor = monaco .editor .create (this .#editable .get (0),
-         {
-            model: model,
-            language: "javascript",
-            contextmenu: true,
-            automaticLayout: true,
-            tabSize: 2,
-            wordWrap: "on",
-            wrappingIndent: "indent",
-            minimap: { enabled: false },
-            bracketPairColorization: { enabled: true },
-            scrollBeyondLastLine: false,
-            hover: { enabled: true },
-         });
+      const editor = monaco .editor .create (this .#editable .get (0),
+      {
+         contextmenu: true,
+         automaticLayout: true,
+         tabSize: 2,
+         wordWrap: "on",
+         wrappingIndent: "indent",
+         minimap: { enabled: false },
+         bracketPairColorization: { enabled: true },
+         scrollBeyondLastLine: false,
+         hover: { enabled: true },
+      });
+
+      X3DScriptAreaElement .#elements .push (this);
 
       this .#editor = editor;
-      this .#model  = model;
 
+      editor .onMouseMove  (() => setTimeout (() => this .changeModel ("javascript")));
+
+      this .changeModel ("javascript-inactive");
       this .reset ();
+   }
+
+   changeModel (language)
+   {
+      if (this .#model ?.getLanguageId () === language)
+         return;
+
+      const
+         viewState = this .#editor .saveViewState (),
+         model     = this .#model,
+         text      = model ?.getValue () ?? "";
+
+      this .#model = monaco .editor .createModel (text, language);
+
+      this .#editor .setModel (this .#model);
+      this .#editor .restoreViewState (viewState);
+
+      model ?.dispose ();
+
+      if (language === "javascript-inactive")
+         return;
+
+      for (const element of X3DScriptAreaElement .#elements .filter (element => element !== this))
+         element .changeModel ("javascript-inactive");
    }
 
    changeColorScheme ()
