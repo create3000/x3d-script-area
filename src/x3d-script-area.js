@@ -300,7 +300,7 @@ class X3DScriptAreaElement extends HTMLElement
       }
    }
 
-   #consoleKeys = ["log", "warn", "error", "debug"];
+   #consoleKeys = ["log", "info", "warn", "error", "debug"];
    #consoleFunctions = { };
 
    wrapConsole ()
