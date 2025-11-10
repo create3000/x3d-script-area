@@ -311,7 +311,7 @@ class X3DScriptAreaElement extends HTMLElement
 
          console [key] = (... args) =>
          {
-            fn .call (console, ... args);
+            fn .apply (console, args);
 
             $("<p></p>")
                .addClass (key)
