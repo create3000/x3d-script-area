@@ -133,6 +133,7 @@ class X3DScriptAreaElement extends HTMLElement
          .appendTo (this .#area);
 
       this .#editable = $("<div></div>")
+         .css ("position", "relative")
          .css ("flex", "1 1 auto")
          .attr ("slot", "editable")
          .appendTo (this);
