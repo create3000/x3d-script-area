@@ -316,7 +316,7 @@ class X3DScriptAreaElement extends HTMLElement
 
             $("<p></p>")
                .addClass (key)
-               .text (`> ${args .map (arg => String (arg)) .join (" ")}`)
+               .text (`> ${args .map (String) .join (" ")}`)
                .appendTo (this .#output);
 
             this .#output .scrollTop (this .#output .prop ("scrollHeight"));
