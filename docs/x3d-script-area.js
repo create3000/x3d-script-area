@@ -133,6 +133,7 @@ class X3DScriptAreaElement extends HTMLElement
          .appendTo (this .#area);
 
       this .#editable = $("<div></div>")
+         .css ("position", "relative")
          .css ("flex", "1 1 auto")
          .attr ("slot", "editable")
          .appendTo (this);
@@ -225,7 +226,8 @@ class X3DScriptAreaElement extends HTMLElement
 
       this .#editor = editor;
 
-      editor .onMouseMove  (() => setTimeout (() => this .changeModel ("javascript")));
+      // Workaround to get multiple editors work on a page and don't affect each other, especially IntelliSense.
+      editor .onMouseMove (() => setTimeout (() => this .changeModel ("javascript")));
 
       this .changeModel ("javascript-inactive");
       this .reset ();
@@ -299,7 +301,7 @@ class X3DScriptAreaElement extends HTMLElement
       }
    }
 
-   #consoleKeys = ["log", "warn", "error", "debug"];
+   #consoleKeys = ["debug", "log", "info", "warn", "error"];
    #consoleFunctions = { };
 
    wrapConsole ()
@@ -310,11 +312,11 @@ class X3DScriptAreaElement extends HTMLElement
 
          console [key] = (... args) =>
          {
-            fn .call (console, ... args);
+            fn .apply (console, args);
 
             $("<p></p>")
                .addClass (key)
-               .text (`> ${args .join (" ")}`)
+               .text (`> ${args .map (arg => String (arg)) .join (" ")}`)
                .appendTo (this .#output);
 
             this .#output .scrollTop (this .#output .prop ("scrollHeight"));
