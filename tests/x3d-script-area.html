@@ -24,7 +24,8 @@ x3d-script-area {
     </style>
   </head>
   <body>
-    <x3d-script-area name="X3D ECMAScript Demo: Browser createScene">
+
+<x3d-script-area name="X3D ECMAScript Demo: Browser createScene">
 <pre>
 const profile    = Browser .getProfile ("Interactive");
 const components = [Browser .getComponent ("Geometry2D"), Browser .getComponent ("Scripting")];
@@ -35,8 +36,9 @@ print (Browser .currentScene .createNode ("InstancedShape"))
 
 const rotation = 123;
 </pre>
-    </x3d-script-area>
-    <x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
+</x3d-script-area>
+
+<x3d-script-area name="X3D ECMAScript Demo: SFVec3f lerp">
 <pre>
 const rotation = new SFRotation (0, 1, 0, Math .PI / 2);
 const vector   = new SFVec3f (0, 0, 1);
@@ -48,6 +50,7 @@ print (rotation .multVec (vector));
 // Expected output: 0 0 1
 // Expected output: 1 0 0
 </pre>
-    </x3d-script-area>
+</x3d-script-area>
+
   </body>
 </html>
