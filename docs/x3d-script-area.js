@@ -37,7 +37,9 @@ class X3DScriptAreaElement extends HTMLElement
       monaco .languages .setMonarchTokensProvider ("javascript-inactive", language .language);
 
       const
-         response     = await fetch ("https://cdn.jsdelivr.net/npm/x_ite@12.1.3/dist/x_ite.d.ts"),
+         // ts           = new URL ("x_ite.d.ts", X3DScriptAreaElement .#browser .scriptURL), // TODO: use this
+         version      = X3DScriptAreaElement .#browser .version,
+         response     = await fetch (`https://cdn.jsdelivr.net/npm/x_ite@${version}/dist/x_ite.d.ts`),
          text         = await response .text (),
          declarations = text .replace (/^.*?(?:export.*?;)/s, "");
 
