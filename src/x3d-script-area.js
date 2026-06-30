@@ -137,7 +137,7 @@ class X3DScriptAreaElement extends HTMLElement
       this .#editable = $("<div></div>")
          .css ("position", "relative")
          .css ("flex", "1 1 auto")
-         .css ("height", "100px")
+         .css ("height", "100px") // Needed to make the editor shrinkable.
          .attr ("slot", "editable")
          .appendTo (this);
 
