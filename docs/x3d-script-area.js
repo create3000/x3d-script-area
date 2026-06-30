@@ -137,7 +137,6 @@ class X3DScriptAreaElement extends HTMLElement
       this .#editable = $("<div></div>")
          .css ("position", "relative")
          .css ("flex", "1 1 auto")
-         .css ("height", "100px") // Needed to make the editor shrinkable.
          .attr ("slot", "editable")
          .appendTo (this);
 
@@ -343,11 +342,8 @@ class X3DScriptAreaElement extends HTMLElement
 :host {
    display: block;
    width: 100%;
-   min-height: 390px;
    height: 390px;
    margin: 1rem 0;
-   resize: vertical;
-   overflow-y: hidden;
 }
 
 .area.light {
