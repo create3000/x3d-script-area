@@ -2,6 +2,21 @@ import js from "@eslint/js";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
 
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
+export default defineConfig ([
+  {
+    files: ["**/*.{js,mjs,cjs}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions:
+    {
+      globals: globals.browser,
+      X3D: "readonly",
+      require: "readonly",
+    },
+    rules: {
+      "no-async-promise-executor": "off",
+      "no-empty": ["error", { "allowEmptyCatch": true }],
+      "semi": "error",
+    },
+  },
 ]);
