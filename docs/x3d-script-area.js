@@ -1,4 +1,4 @@
-const MONACO_VERSION = $(`script[src*="monaco-editor"]`) .attr ("src") .match (/\/monaco-editor(@?.*?)\//) [1];
+const MONACO_VERSION = document .querySelector (`script[src*="monaco-editor"]`) .getAttribute ("src") .match (/\/monaco-editor(@?.*?)\//) [1];
 
 // Use version from website:
 require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs` }});
@@ -103,71 +103,43 @@ class X3DScriptAreaElement extends HTMLElement
    {
       super ();
 
-      const shadow = $(this .attachShadow ({ mode: "open" }));
+      const shadow = this .attachShadow ({ mode: "open" });
 
-      $("<style></style>")
-         .text (X3DScriptAreaElement .#css)
-         .appendTo (shadow);
 
-      // $("<link/>")
-      //    .attr ("rel", "stylesheet")
-      //    .attr ("href", `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs/editor/editor.main.css`)
-      //    .appendTo (shadow);
-
-      this .#area = $("<div></div>")
-         .addClass ("area")
-         .appendTo (shadow);
-
-      this .#name = $("<div></div>")
-         .addClass ("name")
-         .appendTo (this .#area);
-
-      // this .#editable = $("<div></div>")
-      //    .addClass ("editor")
-      //    .appendTo (this .#area);
-
-      // Start Workaround
+      // Workaround
       // https://github.com/microsoft/monaco-editor/issues/3241#issuecomment-1368842346
 
-      $("<slot></slot>")
-         .addClass ("editor")
-         .attr ("name", "editable")
-         .appendTo (this .#area);
+      const html = `
+<style>${X3DScriptAreaElement .#css}</style>
+<div class="area">
+   <div class="name"></div>
+   <slot name="editable"></slot>
+   <div class="bottom">
+      <div class="buttons">
+         <button class="run button" title="Run example and show console output.">Run</button>
+         <button class="reset button" title="Reset example and clear console output.">Reset</button>
+      </div>
+      <div class="output" title="Shows console output."></div>
+   </div>
+</div>
+      `;
 
-      this .#editable = $("<div></div>")
-         .css ("position", "relative")
-         .css ("flex", "1 1 auto")
-         .attr ("slot", "editable")
-         .appendTo (this);
+      shadow .innerHTML = html;
 
-      // End Workaround
+      this .#area     = shadow .querySelector (".area");
+      this .#name     = shadow .querySelector (".name");
+      this .#bottom   = shadow .querySelector (".bottom");
+      this .#buttons  = shadow .querySelector (".buttons");
+      this .#run      = shadow .querySelector (".run");
+      this .#reset    = shadow .querySelector (".reset");
+      this .#output   = shadow .querySelector (".output");
 
-      this .#bottom = $("<div></div>")
-         .addClass ("bottom")
-         .appendTo (this .#area);
+      this .#run   .addEventListener ("click", () => this .run ());
+      this .#reset .addEventListener ("click", () => this .reset ());
 
-      this .#buttons = $("<div></div>")
-         .addClass ("buttons")
-         .appendTo (this .#bottom);
+      this .insertAdjacentHTML ("beforeend", `<div slot="editable" style="position: relative; flex: 1 1 auto;"></div>`)
 
-      this .#run = $("<button></button>")
-         .attr ("title", "Run example and show console output.")
-         .addClass ("button")
-         .text ("Run")
-         .on ("click", () => this .run ())
-         .appendTo (this .#buttons);
-
-      this .#reset = $("<button></button>")
-         .attr ("title", "Reset example and clear console output.")
-         .addClass ("button")
-         .text ("Reset")
-         .on ("click", () => this .reset ())
-         .appendTo (this .#buttons);
-
-      this .#output = $("<div></div>")
-         .attr ("title", "Shows console output.")
-         .addClass ("output")
-         .appendTo (this .#bottom);
+      this .#editable = this .querySelector ("[slot=editable]");
 
       require (["vs/editor/editor.main"], () => this .setup ());
    }
@@ -182,7 +154,7 @@ class X3DScriptAreaElement extends HTMLElement
       {
          case "name":
          {
-            this .#name .text (newValue);
+            this .#name .textContent = newValue;
             break;
          }
       }
@@ -202,7 +174,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       const observer = new MutationObserver (() => this .changeColorScheme ());
 
-      observer .observe ($("html") .get (0),
+      observer .observe (document .querySelector ("html"),
       {
          attributes: true,
          attributeFilter: ["data-mode"],
@@ -211,7 +183,7 @@ class X3DScriptAreaElement extends HTMLElement
 
       // Editor
 
-      const editor = monaco .editor .create (this .#editable .get (0),
+      const editor = monaco .editor .create (this .#editable,
       {
          contextmenu: true,
          automaticLayout: true,
@@ -237,14 +209,15 @@ class X3DScriptAreaElement extends HTMLElement
 
    changeColorScheme ()
    {
+      const html = document .querySelector ("html");
+
       const darkMode = (window .matchMedia ?.("(prefers-color-scheme: dark)") .matches
-         || $("html") .attr ("data-mode") === "dark") && ($("html") .attr ("data-mode") !== "light");
+         || html .getAttribute ("data-mode") === "dark") && (html .getAttribute ("data-mode") !== "light");
 
       monaco .editor .setTheme (darkMode ? "vs-dark" : "vs-light");
 
-      this .#area
-         .removeClass (["light", "dark"])
-         .addClass (darkMode ? "dark" : "light");
+      this .#area .classList .remove ("light", "dark");
+      this .#area .classList .add (darkMode ? "dark" : "light");
    }
 
    changeModel (language)
@@ -283,7 +256,7 @@ class X3DScriptAreaElement extends HTMLElement
 
          await browser .replaceWorld (scene);
 
-         this .#output .empty ();
+         this .#output .replaceChildren ();
 
          this .wrapConsole ();
 
@@ -316,12 +289,9 @@ class X3DScriptAreaElement extends HTMLElement
          {
             fn .apply (console, args);
 
-            $("<p></p>")
-               .addClass (key)
-               .text (`> ${args .map (String) .join (" ")}`)
-               .appendTo (this .#output);
+            this .#output .insertAdjacentHTML ("beforeend", `<p class="${key}">&gt; ${args .map (String) .join (" ")}</p>`);
 
-            this .#output .scrollTop (this .#output .prop ("scrollHeight"));
+            this .#output .scrollTop = this .#output .scrollHeight;
          };
       }
    }
@@ -334,8 +304,8 @@ class X3DScriptAreaElement extends HTMLElement
 
    reset ()
    {
-      this .#model .setValue ($(this) .children (":not([slot])") .text () .trim ());
-      this .#output .empty ();
+      this .#model .setValue (this .querySelector (":scope > :not([slot])") .textContent .trim ());
+      this .#output .replaceChildren ();
    }
 
    static #css = /* CSS */ `
