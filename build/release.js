@@ -7,7 +7,7 @@ const { sh, systemSync } = require ("shell-tools");
 function main ()
 {
    // dist
-   systemSync (`cp src/* docs/`);
+   systemSync (`terser -c -m -o docs/x3d-script-area.js src/x3d-script-area.js`);
 
    // commit
    systemSync (`git add -A`);
