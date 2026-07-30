@@ -105,7 +105,6 @@ class X3DScriptAreaElement extends HTMLElement
 
       const shadow = this .attachShadow ({ mode: "open" });
 
-
       // Workaround
       // https://github.com/microsoft/monaco-editor/issues/3241#issuecomment-1368842346
 
