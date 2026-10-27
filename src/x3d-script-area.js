@@ -1,4 +1,5 @@
-const MONACO_VERSION = document .querySelector (`script[src*="monaco-editor"]`) .getAttribute ("src") .match (/\/monaco-editor(@?.*?)\//) [1];
+const MONACO_VERSION = document .querySelector (`script[src*="monaco-editor"]`)
+   .getAttribute ("src") .match (/\/monaco-editor(@?.*?)\//) [1];
 
 // Use version from website:
 require .config ({ paths: { "vs": `https://cdn.jsdelivr.net/npm/monaco-editor${MONACO_VERSION}/min/vs` }});
